@@ -1,0 +1,16 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "9795fdf9-4539-9817-a63d-99e5344c4c9a": {
+      "ProjectGuid": "9795fdf9-4539-9817-a63d-99e5344c4c9a",
+      "DisplayName": "Assembly-CSharp",
+      "ColorIndex": 0
+    },
+    "c4a9aeee-19e7-21ca-5194-77ecc066194e": {
+      "ProjectGuid": "c4a9aeee-19e7-21ca-5194-77ecc066194e",
+      "DisplayName": "SteamVR",
+      "ColorIndex": 1
+    }
+  },
+  "NextColorIndex": 2
+}
