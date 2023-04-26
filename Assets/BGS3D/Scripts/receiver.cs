@@ -14,25 +14,25 @@ public class receiver : MonoBehaviour
     // 実験用パラメータ
     public enum test_pattern_list
     {
-        Zero_Cursor,
-        Bubble_Gaze_Cursor1,
-        Bubble_Gaze_Cursor2,
-        Gaze_Raycast,
-        Controller_Raycast
+        Zero_Cursor, // カーソルなし
+        Bubble_Gaze_Cursor1, // BGC
+        Bubble_Gaze_Cursor2, // BGC with RayCast
+        Gaze_Raycast, // 視線によるレイキャスト
+        Controller_Raycast // コントローラによるレイキャスト
     }
-    public test_pattern_list test_pattern = test_pattern_list.Bubble_Gaze_Cursor1;
+    public test_pattern_list test_pattern = test_pattern_list.Bubble_Gaze_Cursor1; //　手法切り替え用のリスト構造
     private int target_p_id;
     public enum target_pattern_list
     {
-        Null,
-        High_Density,
-        High_Occlusion,
-        Density_and_Occlusion
+        Null, // ターゲット無し
+        High_Density, // 高密度条件
+        High_Occlusion, // 高オクルージョン条件
+        Density_and_Occlusion // 密度＆オクルージョン条件
     }
-    public target_pattern_list target_pattern = target_pattern_list.High_Density;
-    public bool bubble_switch;
-    public float pointvalue;
-    public float pointvalue2;
+    public target_pattern_list target_pattern = target_pattern_list.High_Density; //　条件切り替え用のリスト構造
+    public bool bubble_switch; // バブルカーソルの表示・非表示
+    public float pointvalue; // サッケード運動に対する閾値
+    public float pointvalue2; // 同上（ほぼ使ってない）
 
     public int test_id;
     public int tester_id; // 被験者のID
@@ -560,7 +560,7 @@ public class receiver : MonoBehaviour
 
         //Blink3();
 
-        Blink();
+        // Blink();
     }
 
     public void result_output()
