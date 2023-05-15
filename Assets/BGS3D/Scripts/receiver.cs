@@ -8,6 +8,7 @@ using System;
 using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 using UnityEngine.UIElements;
 using UnityEngine.XR.OpenXR.Input;
+using ViveSR.anipal.Eye;
 
 public class receiver : MonoBehaviour
 {
@@ -55,7 +56,7 @@ public class receiver : MonoBehaviour
     //右のまぶたの開き具合格納用関数
     public float RightBlink;
     //------------------------------
-    public int BlinkFlag;
+    public int BlinkFlag; // これがTrueになった瞬間にターゲット選択を確定させるので，瞬き関係はこれを弄るだけで十分．
     public int BlinkCount;
     public int BlinkSwitch;
     public float BlinkTime;
@@ -70,6 +71,7 @@ public class receiver : MonoBehaviour
     public List<int> tasknums;
     public List<string> tasklogs;
     public List<string> tasklogs2;
+    public List<string> tasklogs3;
     private List<float> task_start_time;
     private List<float> task_end_time;
     private string filePath;
@@ -168,6 +170,8 @@ public class receiver : MonoBehaviour
     AudioSource audioSource;
 
     private float test_time_tmp;
+
+    public gaze_data gaze_data;
 
     void Start()
     {
@@ -561,6 +565,9 @@ public class receiver : MonoBehaviour
         //Blink3();
 
         // Blink();
+
+        // 視線関係のデータ取得
+        gaze_data.get_gaze_data();
     }
 
     public void result_output()
@@ -647,7 +654,7 @@ public class receiver : MonoBehaviour
             Debug.Log("OK=Switch" + 0);
         }
 
-        // 3回以上瞬きをしあ場合
+        // 3回以上瞬きをした場合
         if (BlinkCount > 2)
         {
             BlinkFlag = 1;
@@ -766,6 +773,11 @@ public class receiver : MonoBehaviour
         streamWriter.Flush();
         streamWriter.Close();
         Debug.Log("data_input_end!!");
+    }
+
+    void gaze_dates()
+    {
+
     }
 
     void set_testpattern()
