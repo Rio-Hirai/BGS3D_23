@@ -34,7 +34,7 @@ m_LocalPackages:
       ticks: 637456836450000000
     m_Hash: 2919789393
 m_ProjectPath: C:/Users/riong/VR_projects/BGS3D_23/Packages
-m_EditorVersion: 2022.2.18f1 (5ebc6493a86f)
+m_EditorVersion: 2022.2.19f1 (765657fe9343)
 m_ResolvedPackages:
 - packageId: com.unity.ai.navigation@1.1.3
   testable: 0
