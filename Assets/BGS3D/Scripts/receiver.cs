@@ -529,11 +529,13 @@ public class receiver : MonoBehaviour
                 audioSource.PlayOneShot(sound_END);
                 result_output();
                 result_output_csv();
+                result_output_csv2();
             }
         }
 
         if (error_output_flag)
         {
+            result_output_csv2();
             error_output_flag = false;
             audioSource.PlayOneShot(sound_END);
             error_output();
@@ -567,7 +569,7 @@ public class receiver : MonoBehaviour
         // Blink();
 
         // 視線関係のデータ取得
-        gaze_data.get_gaze_data();
+        // gaze_data.get_gaze_data(); // ここに入れるとフレームレートが落ちる
     }
 
     public void result_output()
@@ -719,6 +721,26 @@ public class receiver : MonoBehaviour
         Debug.Log("data_input_end!!");
     }
 
+    public void result_output_csv2()
+    {
+        Debug.Log("data_input_csv_start2!!");
+
+        //ファイル生成
+        StreamWriter streamWriter = File.AppendText(filePath + "_gaze_data.csv");
+
+        // 各タスクの計測を追記
+        streamWriter.WriteLine("timestamp,taskNo,gaze_x,gaze_y,pupil_r,pupil_l,blink_r,blink_l");
+        for (int i = 0; i < tasklogs3.Count; i++)
+        {
+            streamWriter.WriteLine(tasklogs3[i]);
+        }
+
+        // 後処理
+        streamWriter.Flush();
+        streamWriter.Close();
+        Debug.Log("data_input_end2!!");
+    }
+
     public void error_output()
     {
         Debug.Log("data_input_start!!");
@@ -773,11 +795,6 @@ public class receiver : MonoBehaviour
         streamWriter.Flush();
         streamWriter.Close();
         Debug.Log("data_input_end!!");
-    }
-
-    void gaze_dates()
-    {
-
     }
 
     void set_testpattern()
