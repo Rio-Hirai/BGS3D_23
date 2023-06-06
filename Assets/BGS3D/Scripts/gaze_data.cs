@@ -11,6 +11,7 @@ namespace ViveSR
 
             public class gaze_data : MonoBehaviour
             {
+
                 //⓪取得呼び出し-----------------------------
                 //呼び出したデータ格納用の関数
                 EyeData eye;
