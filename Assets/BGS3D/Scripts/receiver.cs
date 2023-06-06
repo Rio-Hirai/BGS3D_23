@@ -321,6 +321,7 @@ public class receiver : MonoBehaviour
     {
         if (SteamVR_Actions.default_SnapTurnLeft.GetStateDown(SteamVR_Input_Sources.Any) && switch_flag == 0)
         {
+            //test git
             Debug.Log("LEFT");
             if (test_id > 1)
             {
