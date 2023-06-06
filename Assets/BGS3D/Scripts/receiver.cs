@@ -267,6 +267,7 @@ public class receiver : MonoBehaviour
         if (test_id == 2)
         {
             bubblegaze.GetComponent<Collider>().enabled = false;
+            
         }
         else
         {
