@@ -41,6 +41,7 @@ namespace ViveSR
             /** @struct EyeData
 			* A struct containing all data listed below.
 			*/
+            [Serializable]
             public struct EyeData
             {
                 public bool no_user;

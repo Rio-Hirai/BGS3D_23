@@ -9,6 +9,7 @@ using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 using UnityEngine.UIElements;
 using UnityEngine.XR.OpenXR.Input;
 using ViveSR.anipal.Eye;
+using UnityEngine.XR;
 
 public class receiver : MonoBehaviour
 {
@@ -173,6 +174,12 @@ public class receiver : MonoBehaviour
 
     public gaze_data gaze_data;
 
+    //ファイル生成
+    private StreamWriter streamWriter_gaze;
+
+    private Quaternion HMDRotationQ; // HMDの角度
+    public Vector3 HMDRotation; // HMDの角度
+
     void Start()
     {
         // モード管理
@@ -281,6 +288,7 @@ public class receiver : MonoBehaviour
         input_start_time = dt.Month.ToString() + dt.Day.ToString() + dt.Hour.ToString() + dt.Minute.ToString() + dt.Second.ToString();
         filePath = Application.dataPath + "/BGS3D/Scripts/test_results/" + "test_id = " + test_id + "___" + "target_p_id = " + target_p_id + "___" + "tester_id  = " + tester_id + "___" + tester_name + "___" + input_start_time;
         //filePath = Application.dataPath + "/BGS3D/Scripts/test_results/" + test_id + "_" + test_pattern + "_" + target_p_id + "_" + target_pattern + "_" + tester_id + "_" + tester_name + ".txt";
+        streamWriter_gaze = File.AppendText(filePath + "_gaze_data.csv");
 
         // ログ作成
         tasklogs = new List<string>();
@@ -310,6 +318,8 @@ public class receiver : MonoBehaviour
 
         audioSource = GetComponent<AudioSource>();
 
+        result_output_every(("timestamp,taskNo,gaze_x,gaze_y,pupil_r,pupil_l,blink_r,blink_l,hmd_x,hmd_y,hmd_z"), streamWriter_gaze, false);
+
         //// コントローラ設定
         //if (pose == null)
         //    pose = this.GetComponent<SteamVR_Behaviour_Pose>();
@@ -321,6 +331,7 @@ public class receiver : MonoBehaviour
     }
 
     // Update is called once per frame
+    [Obsolete]
     void Update()
     {
         if (SteamVR_Actions.default_SnapTurnLeft.GetStateDown(SteamVR_Input_Sources.Any) && switch_flag == 0)
@@ -529,13 +540,15 @@ public class receiver : MonoBehaviour
                 audioSource.PlayOneShot(sound_END);
                 result_output();
                 result_output_csv();
-                result_output_csv2();
+                //result_output_csv2();
+                result_output_every("", streamWriter_gaze, true);
             }
         }
 
         if (error_output_flag)
         {
-            result_output_csv2();
+            //result_output_csv2();
+            result_output_every("", streamWriter_gaze, true);
             error_output_flag = false;
             audioSource.PlayOneShot(sound_END);
             error_output();
@@ -564,12 +577,20 @@ public class receiver : MonoBehaviour
             }
         }
 
-        //Blink3();
-
+        // Blink3();
         // Blink();
+        //result_output_every("test,test,test.test", streamWriter_gaze, false);
+
+        // Head（ヘッドマウンドディスプレイ）の情報を一時保管-----------
+        //回転座標をクォータニオンで値を受け取る
+        HMDRotationQ = InputTracking.GetLocalRotation(XRNode.Head);
+        // 取得した値をクォータニオン → オイラー角に変換
+        HMDRotation = HMDRotationQ.eulerAngles;
+        //--------------------------------------------------------------
 
         // 視線関係のデータ取得
-        gaze_data.get_gaze_data();
+        // gaze_data.get_gaze_data();
+        result_output_every(gaze_data.get_gaze_data2(), streamWriter_gaze, false);
     }
 
     public void result_output()
@@ -729,7 +750,7 @@ public class receiver : MonoBehaviour
         StreamWriter streamWriter = File.AppendText(filePath + "_gaze_data.csv");
 
         // 各タスクの計測を追記
-        streamWriter.WriteLine("timestamp,taskNo,gaze_x,gaze_y,pupil_r,pupil_l,blink_r,blink_l");
+        streamWriter.WriteLine("timestamp,taskNo,gaze_x,gaze_y,pupil_r,pupil_l,blink_r,blink_l,hmd_x,hmd_y,hmd_z");
         for (int i = 0; i < tasklogs3.Count; i++)
         {
             streamWriter.WriteLine(tasklogs3[i]);
@@ -738,7 +759,20 @@ public class receiver : MonoBehaviour
         // 後処理
         streamWriter.Flush();
         streamWriter.Close();
-        Debug.Log("data_input_end2!!");
+        Debug.Log("data_output_end2!!");
+    }
+
+    public void result_output_every(string data, StreamWriter streamWriter, bool endtask)
+    {
+        // これが呼び出されるたびに変数（第一引数の文字列）をcsvファイルに出力する
+        // falseの場合は書き込み処理，trueの場合は閉じる処理
+        if (endtask == false) streamWriter.WriteLine(data);
+
+        if (endtask == true)
+        {
+            streamWriter.Close();
+            Debug.Log("data_output_every!!");
+        }
     }
 
     public void error_output()
@@ -835,5 +869,12 @@ public class receiver : MonoBehaviour
                 numbers.RemoveAt(index);
             }
         }
+    }
+
+    // アプリケーション終了時の処理を記述
+    private void OnApplicationQuit()
+    {
+        // 視線データを保存したファイルを閉じる
+        result_output_every("", streamWriter_gaze, true);
     }
 }

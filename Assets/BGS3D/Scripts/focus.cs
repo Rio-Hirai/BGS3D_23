@@ -66,6 +66,7 @@ namespace ViveSR.anipal.Eye
                     if (FocusInfo.collider.gameObject != null)
                     {
                         objectName_new = FocusInfo.collider.gameObject;
+                        FocusInfo.collider.GetComponent<Renderer>().material.color = Color.red;
                         script.RayTarget = objectName_new;
                         //objectName_new.GetComponent<Renderer>().material.color = Color.blue;
                     }
@@ -77,30 +78,30 @@ namespace ViveSR.anipal.Eye
             }
 
             // オブジェクト選択
-            if ((objectName_now != objectName_new) && (script.test_id == 3))
+            if ((objectName_now != objectName_new) && (script.test_id == 3)) // 注視しているオブジェクトが異なり，かつ視線レイキャストモードの場合
             {
                 script.same_target = false;
                 script.select_target_id = -1;
-                objectName_new.GetComponent<target_para_set>().dtime = 0;
+                objectName_new.GetComponent<target_para_set>().dtime = 0; //注視時間を初期化
                 //objectName_now.GetComponent<Renderer>().material.color = Color.white;
                 //objectName_new.GetComponent<Renderer>().material.color = Color.yellow;
-                script.selecting_target = objectName_new;
+                script.selecting_target = objectName_new; //注視しているオブジェクトを更新
                 script.lens_flag = true;
                 script.lens_flag2 = true;
             }
 
-            if ((objectName_new != null) && (script.test_id == 3))
+            if ((objectName_new != null) && (script.test_id == 3)) // オブジェクトが空でなく，かつ視線レイキャストモードの場合
             {
-                objectName_new.GetComponent<target_para_set>().dtime += Time.deltaTime;
+                objectName_new.GetComponent<target_para_set>().dtime += Time.deltaTime; // 注視中のオブジェクトの総連続注視時間を追加．
 
-                if (objectName_new.GetComponent<target_para_set>().dtime >= script.set_dtime || script.next_step__flag)
+                if (objectName_new.GetComponent<target_para_set>().dtime >= script.set_dtime || script.next_step__flag) //一定時間注視した＝選択が成立した場合
                 {
-                    script.select_target_id = objectName_new.GetComponent<target_para_set>().Id;
-                    script.next_step__flag = false;
+                    script.select_target_id = objectName_new.GetComponent<target_para_set>().Id; //IDを更新
+                    script.next_step__flag = false; //
                     //objectName_new.GetComponent<Renderer>().material.color = script.target_color;
                 }
 
-                objectName_now = objectName_new;
+                objectName_now = objectName_new; //注視しているオブジェクトを更新
 
                 if (Vector3.Distance(pointer.transform.position, objectName_now.transform.position) > 0.2f)
                 {

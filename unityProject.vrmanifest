@@ -5,7 +5,7 @@
       "app_key": "application.generated.unity.bgs.exe",
       "launch_type": "url",
       "url": "steam://launch/",
-      "action_manifest_path": "F:\\WORKSPACE_SSD\\BGS3D_23\\Assets\\StreamingAssets\\SteamVR\\actions.json",
+      "action_manifest_path": "C:\\Users\\riong\\VR_projects\\BGS3D_23\\Assets\\StreamingAssets\\SteamVR\\actions.json",
       "strings": {
         "en_us": {
           "name": "BGS [Testing]"
